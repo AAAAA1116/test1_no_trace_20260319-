@@ -1,1 +1,0 @@
-snapshot no-trace rules update
