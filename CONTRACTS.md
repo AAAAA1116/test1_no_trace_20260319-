@@ -5,14 +5,22 @@
 本项目：个人博客（Python + FastAPI，博客 + 小软件展示）
 
 ## 全局约定
-- 后端：FastAPI，返回 HTML 或 JSON 按路由约定。
-- 静态资源：`content/posts/{slug}/` 下图片等通过 `/posts/{slug}/xxx` 访问。
+- **后端**：FastAPI，返回 HTML 或 JSON 按路由约定。
+- **静态资源**：`content/posts/{slug}/` 下图片等通过 `/posts/{slug}/xxx` 访问。
+- **API 响应规范**：
+  - 成功：`{"ok": true, "data": { ... }}`
+  - 失败：`{"ok": false, "error": { "code": "...", "message": "..." }}`
+
+## 安全与合规（强制）
+- **数据库安全**：严禁使用字符串拼接构建 SQL 语句。必须使用参数化查询（Parameterized Queries）或 ORM（如 SQLAlchemy/Drizzle）提供的预编译机制。
+- **密钥管理**：严禁将 API 密钥、数据库密码、Secret Key 等敏感信息硬编码在代码中或提交到前端。必须通过环境变量或 `.env` 文件（且必须在 `.gitignore` 中）管理。
+- **敏感字段**：服务端必须在返回前剔除敏感字段（如密码哈希、用户邮箱等）。
 
 ## 内容与路由
-- 首页：`/`，博客入口：`/blog`，文章详情：`/blog/{post_id}`。
-- 文章正文：优先从 `content/posts/{slug}/body.md` 或 `body.txt` 读取，无 slug 则仅显示摘要。
-- 小软件列表：`/tools`，详情：`/tools/{tool_id}`。
-- API 文档：`/docs`（FastAPI 自带）。
+- **首页**：`/`，博客入口：`/blog`，文章详情：`/blog/{post_id}`。
+- **文章正文**：优先从 `content/posts/{slug}/body.md` 或 `body.txt` 读取，无 slug 则仅显示摘要。
+- **小软件列表**：`/tools`，详情：`/tools/{tool_id}`。
+- **API 文档**：`/docs`（FastAPI 自带）。
 
 ## 数据（当前）
 - 文章列表与工具列表暂在 `main.py` 中写死；后续可迁至 SQLite 等，由迁移或约定文件说明。
